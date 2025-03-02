@@ -57,18 +57,13 @@ class TestLatinSquare(unittest.TestCase):
 
     def test_reduce_first_row_sorted(self):
         """Test that the first row of the reduced Latin square is in ascending order."""
-        latin_square = LatinSquare.generate(4)
-        reduced_square = LatinSquare.reduce(latin_square)
-        first_row = reduced_square.permutations[0].values
-        self.assertEqual(first_row, list(range(4)))
-
-    def test_reduce_first_column_sorted(self):
-        """Test that the first column of the reduced Latin square is in ascending order."""
-        latin_square = LatinSquare.generate(4)
-        reduced_square = LatinSquare.reduce(latin_square)
-        first_column = [p.values[0] for p in reduced_square.permutations]
-        self.assertEqual(first_column, list(range(4)))
-
+        for _ in range(100):
+            latin_square = LatinSquare.generate(4)
+            reduced_square = LatinSquare.reduce(latin_square)
+            first_row = reduced_square.permutations[0].values
+            self.assertEqual(first_row, list(range(4)))
+            first_column = [p.values[0] for p in reduced_square.permutations]
+            self.assertEqual(first_column, list(range(4)))
 
 if __name__ == "__main__":
     unittest.main()

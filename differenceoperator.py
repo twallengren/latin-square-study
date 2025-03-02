@@ -61,14 +61,11 @@ class DifferenceOperator:
         identity = PermutationChain([Permutation(list(range(len(chain[0].values)))) for _ in range(len(chain))])
 
         while True:
-            print(f"Step {steps}:\n{current}")
             if current in seen:
                 cycle_length = steps - seen[current]
-                print(f"Cycle detected at step {steps}, true order is {cycle_length}")
                 return cycle_length
             seen[current] = steps
             if current == identity:
-                print(f"Reached identity at step {steps}.")
                 return steps
             current = DifferenceOperator.derivative(current)
             steps += 1

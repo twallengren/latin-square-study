@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 
 from permutation import Permutation
 from permutationchain import PermutationChain
@@ -21,7 +21,11 @@ class Transformation:
         Returns:
             PermutationChain: A new permutation chain with the specified row permutation applied.
         """
-        return PermutationChain([chain[perm.values[i]] for i in range(len(chain))])
+        new_chain: List[Optional[Permutation]] = [None for _ in range(len(chain))]
+        for current_index, desired_index in enumerate(perm.values):
+            new_chain[desired_index] = chain[current_index]
+
+        return PermutationChain(new_chain)
 
     @staticmethod
     def permute_columns(chain: "PermutationChain", perm: Permutation) -> "PermutationChain":
