@@ -1,15 +1,38 @@
-import numpy as np
-
 from permutation import Permutation
 from permutationchain import PermutationChain
 
+
 class DifferenceOperator:
+    """
+    Provides methods to compute the difference between permutations and
+    derive the transformation behavior of permutation chains under iteration.
+    """
+
     @staticmethod
-    def difference(p1, p2):
+    def difference(p1: Permutation, p2: Permutation) -> Permutation:
+        """
+        Computes the difference between two permutations.
+
+        Args:
+            p1 (Permutation): The first permutation.
+            p2 (Permutation): The second permutation.
+
+        Returns:
+            Permutation: The resulting permutation difference.
+        """
         return p2.inverse().apply(p1)
 
     @staticmethod
-    def derivative(chain):
+    def derivative(chain: PermutationChain) -> PermutationChain:
+        """
+        Computes the derivative of a permutation chain.
+
+        Args:
+            chain (PermutationChain): The input permutation chain.
+
+        Returns:
+            PermutationChain: The resulting derivative chain.
+        """
         if len(chain) == 0:
             return PermutationChain([])
         return PermutationChain([
@@ -18,18 +41,27 @@ class DifferenceOperator:
         ])
 
     @staticmethod
-    def order(chain):
+    def order(chain: PermutationChain) -> int:
+        """
+        Computes the order of a permutation chain under repeated application of the derivative.
+
+        Args:
+            chain (PermutationChain): The input permutation chain.
+
+        Returns:
+            int: The number of steps before the chain returns to the identity.
+        """
         if len(chain) == 0:
             print("Error: Empty permutation chain received.")
-            return -1  # Indicate an error
+            return -1
 
         seen = {}
         current = chain
         steps = 0
-        identity = PermutationChain([Permutation(np.arange(len(chain[0].values))) for _ in range(len(chain))])
+        identity = PermutationChain([Permutation(list(range(len(chain[0].values)))) for _ in range(len(chain))])
 
         while True:
-            print(f"Step {steps}:\n{current}")  # Debugging output
+            print(f"Step {steps}:\n{current}")
             if current in seen:
                 cycle_length = steps - seen[current]
                 print(f"Cycle detected at step {steps}, true order is {cycle_length}")
