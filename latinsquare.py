@@ -45,3 +45,21 @@ class LatinSquare(PermutationChain):
             permutations = [Permutation(random.sample(base, len(base))) for _ in range(n)]
 
         return LatinSquare(permutations)
+
+    @staticmethod
+    def reduce(square: "LatinSquare") -> "LatinSquare":
+        """
+        Reduces the Latin square by applying column transformations so that
+        the first row is in ascending order, then applying row transformations
+        so the first column is in ascending order.
+
+        Returns:
+            LatinSquare: The reduced form of the Latin square.
+        """
+
+        col_permuted = Transformation.permute_columns(square, square.permutations[0])
+        first_column = [p.values[0] for p in col_permuted.permutations]
+        row_permutation = Permutation(first_column)
+        reduced_square = Transformation.permute_rows(col_permuted, row_permutation)
+
+        return LatinSquare(reduced_square.permutations)

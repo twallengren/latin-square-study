@@ -10,39 +10,40 @@ class Transformation:
     """
 
     @staticmethod
-    def swap_rows(chain: "PermutationChain", i: int, j: int) -> "PermutationChain":
+    def permute_rows(chain: "PermutationChain", perm: Permutation) -> "PermutationChain":
         """
-        Swaps two rows in a permutation chain.
+        Applies a row permutation to the permutation chain.
 
         Args:
             chain (PermutationChain): The input permutation chain.
-            i (int): Index of the first row to swap.
-            j (int): Index of the second row to swap.
+            perm (Permutation): The row permutation to apply.
 
         Returns:
-            PermutationChain: A new permutation chain with the specified rows swapped.
+            PermutationChain: A new permutation chain with the specified row permutation applied.
         """
-        swapped = chain.permutations[:]
-        swapped[i], swapped[j] = swapped[j], swapped[i]
-        return PermutationChain(swapped)
+        return PermutationChain([chain[perm.values[i]] for i in range(len(chain))])
 
     @staticmethod
-    def swap_columns(chain: "PermutationChain", i: int, j: int) -> "PermutationChain":
+    def permute_columns(chain: "PermutationChain", perm: Permutation) -> "PermutationChain":
         """
-        Swaps two columns in a permutation chain.
+        Applies a column permutation to the permutation chain.
 
         Args:
             chain (PermutationChain): The input permutation chain.
-            i (int): Index of the first column to swap.
-            j (int): Index of the second column to swap.
+            perm (Permutation): The column permutation to apply.
 
         Returns:
-            PermutationChain: A new permutation chain with the specified columns swapped.
+            PermutationChain: A new permutation chain with the specified column permutation applied.
         """
-        swapped = [Permutation(p.values[:]) for p in chain.permutations]
-        for row in swapped:
-            row.values[i], row.values[j] = row.values[j], row.values[i]
-        return PermutationChain(swapped)
+        new_permutations = []
+
+        for row in chain:
+            permuted_values = row.values[:]  # Copy row values
+            for old_index, new_index in enumerate(perm.values):
+                permuted_values[new_index] = row.values[old_index]
+            new_permutations.append(Permutation(permuted_values))
+
+        return PermutationChain(new_permutations)
 
     @staticmethod
     def transpose(chain: "PermutationChain") -> Optional["PermutationChain"]:

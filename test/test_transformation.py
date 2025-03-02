@@ -6,29 +6,35 @@ from transformation import Transformation
 
 class TestTransformation(unittest.TestCase):
 
-    def test_swap_rows(self):
-        """Test swapping rows in a permutation chain."""
+    def test_permute_rows(self):
+        """Test applying a row permutation to a permutation chain."""
         p1 = Permutation([0, 1, 2])
         p2 = Permutation([2, 0, 1])
         p3 = Permutation([1, 2, 0])
         chain = PermutationChain([p1, p2, p3])
 
-        swapped_chain = Transformation.swap_rows(chain, 0, 2)
-        expected = PermutationChain([p3, p2, p1])
-        self.assertEqual(swapped_chain, expected)
+        row_permutation = Permutation([2, 0, 1])  # Move row 0 → 2, row 1 → 0, row 2 → 1
+        permuted_chain = Transformation.permute_rows(chain, row_permutation)
 
-    def test_swap_columns(self):
-        """Test swapping columns in a permutation chain."""
+        expected = PermutationChain([p3, p1, p2])  # Reordered accordingly
+        self.assertEqual(permuted_chain, expected)
+
+    def test_permute_columns(self):
+        """Test applying a column permutation to a permutation chain."""
         p1 = Permutation([0, 1, 2])
         p2 = Permutation([2, 0, 1])
         p3 = Permutation([1, 2, 0])
         chain = PermutationChain([p1, p2, p3])
 
-        swapped_chain = Transformation.swap_columns(chain, 0, 2)
-        expected = PermutationChain([Permutation([2, 1, 0]),
-                                     Permutation([1, 0, 2]),
-                                     Permutation([0, 2, 1])])
-        self.assertEqual(swapped_chain, expected)
+        column_permutation = Permutation([2, 0, 1])  # Move col 0 → 2, col 1 → 0, col 2 → 1
+        permuted_chain = Transformation.permute_columns(chain, column_permutation)
+
+        expected = PermutationChain([
+            Permutation([1, 2, 0]),  # New column order for p1
+            Permutation([0, 1, 2]),  # New column order for p2
+            Permutation([2, 0, 1])   # New column order for p3
+        ])
+        self.assertEqual(permuted_chain, expected)
 
     def test_transpose_valid(self):
         """Test transposing a valid square permutation chain."""
